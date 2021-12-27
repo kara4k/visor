@@ -1,17 +1,18 @@
-package com.kara4k.visor.processor;
+package com.kara4k.visor.main;
 
 import com.kara4k.visor.model.IntPoint;
 import com.kara4k.visor.model.OutputMode;
 import com.kara4k.visor.model.Params;
-import com.kara4k.visor.util.CoordsUtil;
+import com.kara4k.visor.util.CoordUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.File;
 import java.util.List;
+import java.util.function.Supplier;
 
-public class ResultPrinter {   //// TODO: 12/26/21 own point and own Rectangle
+public class ResultPrinter {
 
 	public static void printFoundTargets(
 			@NotNull final Params params, @NotNull final List<Rectangle> rectangles, @NotNull final File targetFile,
@@ -27,14 +28,14 @@ public class ResultPrinter {   //// TODO: 12/26/21 own point and own Rectangle
 		}
 
 		for (final Rectangle rectangle: rectangles) {
-			if (params.isOutputCenterOnly()) {
-				final IntPoint centerPoint = CoordsUtil.getCenterPoint(rectangle);
+			if (params.isOutputMatterOnly()) {
+				final IntPoint centerPoint = CoordUtils.getCenterPoint(rectangle);
 				final String line =
 						createDelimitedString(params.getDelimiter(), centerPoint.getX(), centerPoint.getY());
 				System.out.println(line);
 
 			} else if (params.getOutputPattern() != null && !params.getOutputPattern().isEmpty()) {
-				final IntPoint centerPoint = CoordsUtil.getCenterPoint(rectangle);
+				final IntPoint centerPoint = CoordUtils.getCenterPoint(rectangle);
 				final String formattedLine =
 						String.format(params.getOutputPattern(), (int) rectangle.getX(), (int) rectangle.getY(),
 									  (int) rectangle.getWidth(), (int) rectangle.getHeight(), centerPoint.getX(),
@@ -62,7 +63,7 @@ public class ResultPrinter {   //// TODO: 12/26/21 own point and own Rectangle
 											  intPoint.getColor().getRed(), intPoint.getColor().getGreen(),
 											  intPoint.getColor().getBlue(), sourceName);
 			System.out.println(line);
-		} else if (params.isOutputCenterOnly()) { // todo rename
+		} else if (params.isOutputMatterOnly()) { // todo rename
 			final String line = createDelimitedString(params.getDelimiter(), intPoint.getColor().getRed(),
 													  intPoint.getColor().getGreen(), intPoint.getColor().getBlue());
 			System.out.println(line);
@@ -86,13 +87,16 @@ public class ResultPrinter {   //// TODO: 12/26/21 own point and own Rectangle
 	}
 
 	public static void printTestResult(final Params params, final IntPoint point, final boolean success) {
-		final String line =
-				createDelimitedString(params.getDelimiter(), point.getX(), point.getY(), success ? 0 : 1);
+		final String line = createDelimitedString(params.getDelimiter(), point.getX(), point.getY(), success ? 0 : 1);
 		System.out.println(line);
 	}
 
 	public static void printTestResult(final boolean success) {
 		System.out.println(success ? 0 : 1);
+	}
+
+	public static void print(final Supplier<String> message) {
+		System.out.println(message.get());
 	}
 
 }

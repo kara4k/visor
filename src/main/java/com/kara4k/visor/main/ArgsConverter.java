@@ -1,6 +1,7 @@
-package com.kara4k.visor.util;
+package com.kara4k.visor.main;
 
 import com.kara4k.visor.model.IntPoint;
+import com.kara4k.visor.util.ErrorUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -10,13 +11,10 @@ import java.util.function.Function;
 public class ArgsConverter {
 
 	public static IntPoint[] convertPixelsToGetColor(@NotNull final String[] pixelsToGetColor) {
-		return convertToIntPoints(pixelsToGetColor, 2, new Function<String[], IntPoint>() {
-			@Override
-			public IntPoint apply(final String[] split) {
-				final int x = Integer.parseInt(split[0]);
-				final int y = Integer.parseInt(split[1]);
-				return new IntPoint(x, y);
-			}
+		return convertToIntPoints(pixelsToGetColor, 2, split -> {
+			final int x = Integer.parseInt(split[0]);
+			final int y = Integer.parseInt(split[1]);
+			return new IntPoint(x, y);
 		});
 	}
 
@@ -39,13 +37,13 @@ public class ArgsConverter {
 			final String arg = pixelsToCompare[i];
 			final String[] split = arg.split(",");
 			if (split.length != forceSplitCount) {
-				ErrorUtil.printErrorAndExit(() -> "Wrong argument: " + arg);
+				ErrorUtils.printErrorAndExit(() -> "Wrong argument: " + arg);
 			}
 			try {
 				final IntPoint point = converter.apply(split);
 				points[i] = point;
 			} catch (final NumberFormatException e) {
-				ErrorUtil.printErrorAndExit(e::getMessage);
+				ErrorUtils.printErrorAndExit(e::getMessage);
 			}
 		}
 		return points;

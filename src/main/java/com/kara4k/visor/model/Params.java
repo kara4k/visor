@@ -10,7 +10,7 @@ public class Params {
 	private int[] rectangle;
 	private int[] accuracy;
 	private long delay;
-	private boolean outputCenterOnly;
+	private boolean isOutputMatterOnly;
 	private OutputMode outputMode;
 	private String delimiter;
 	private String outputPattern;
@@ -19,6 +19,9 @@ public class Params {
 	private IntPoint[] pixelsToGetColor;
 	private IntPoint[] pixelsToCompare;
 	private boolean showEveryPixelMatch;
+
+	private boolean screenshotMode;
+	private File outputFile;
 
 	public File getSourceImage() {
 		return sourceImage;
@@ -60,12 +63,12 @@ public class Params {
 		this.delay = delay;
 	}
 
-	public boolean isOutputCenterOnly() {
-		return outputCenterOnly;
+	public boolean isOutputMatterOnly() {
+		return isOutputMatterOnly;
 	}
 
-	public void setOutputCenterOnly(final boolean outputCenterOnly) {
-		this.outputCenterOnly = outputCenterOnly;
+	public void setOutputMatterOnly(final boolean outputMatterOnly) {
+		this.isOutputMatterOnly = outputMatterOnly;
 	}
 
 	public OutputMode getOutputMode() {
@@ -124,13 +127,30 @@ public class Params {
 		this.showEveryPixelMatch = showEveryPixelMatch;
 	}
 
+	public boolean isScreenshotMode() {
+		return screenshotMode;
+	}
+
+	public void setScreenshotMode(final boolean screenshotMode) {
+		this.screenshotMode = screenshotMode;
+	}
+
+	public File getOutputFile() {
+		return outputFile;
+	}
+
+	public void setOutputFile(final File outputFile) {
+		this.outputFile = outputFile;
+	}
+
 	@Override
 	public String toString() {
 		return "Params{" + "sourceImage=" + sourceImage + ", targetImages=" + Arrays.toString(targetImages)
 				+ ", rectangle=" + Arrays.toString(rectangle) + ", accuracy=" + Arrays.toString(accuracy) + ", delay="
-				+ delay + ", outputCenterOnly=" + outputCenterOnly + ", outputMode=" + outputMode + ", delimiter='"
+				+ delay + ", isOutputMatterOnly=" + isOutputMatterOnly + ", outputMode=" + outputMode + ", delimiter='"
 				+ delimiter + '\'' + ", outputPattern='" + outputPattern + '\'' + ", pixelsMode=" + pixelsMode
 				+ ", pixelsToGetColor=" + Arrays.toString(pixelsToGetColor) + ", pixelsToCompare=" + Arrays.toString(
-				pixelsToCompare) + ", showEveryPixelMatch=" + showEveryPixelMatch + '}';
+				pixelsToCompare) + ", showEveryPixelMatch=" + showEveryPixelMatch + ", screenshotMode=" + screenshotMode
+				+ ", outputFile=" + outputFile + '}';
 	}
 }

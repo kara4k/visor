@@ -1,6 +1,6 @@
-package com.kara4k.visor.processor;
+package com.kara4k.visor.main;
 
-import com.kara4k.visor.util.ErrorUtil;
+import com.kara4k.visor.util.ErrorUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +23,7 @@ public class ImageLoader {
 				logger.info("Source is null, start sleep for " + delay + "before screenshot capturing");
 				Thread.sleep(delay);
 			} catch (final InterruptedException e) {
-				ErrorUtil.printErrorAndExit(e::getMessage);
+				ErrorUtils.printErrorAndExit(e::getMessage);
 			}
 			sourceImage = RobotWrapper.getInstance().getFullScreenshot();
 		} else {
@@ -37,10 +37,11 @@ public class ImageLoader {
 		try {
 			image = ImageIO.read(file);
 		} catch (final IOException e) {
-			ErrorUtil.printErrorAndExit(e::getMessage);
+			ErrorUtils.printErrorAndExit(e::getMessage);
 		}
 		if (image == null) {
-			ErrorUtil.printErrorAndExit(() -> "Can't load image from " + file.getAbsolutePath());
+			logger.info("Image is null " + file.getAbsolutePath());
+			ErrorUtils.printErrorAndExit(() -> "Can't load image from " + file.getAbsolutePath());
 		}
 		return image;
 	}
@@ -53,7 +54,7 @@ public class ImageLoader {
 			image = image.getSubimage((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.getWidth(),
 									  (int) rectangle.getHeight());
 		} catch (final IOException e) {
-			ErrorUtil.printErrorAndExit(e::getMessage);
+			ErrorUtils.printErrorAndExit(e::getMessage);
 		}
 		return image;
 	}

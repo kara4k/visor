@@ -1,11 +1,11 @@
 package com.kara4k.visor;
 
+import com.kara4k.visor.main.ArgsConverter;
+import com.kara4k.visor.main.MainExecutor;
+import com.kara4k.visor.main.PixelComparator;
 import com.kara4k.visor.model.IntPoint;
 import com.kara4k.visor.model.OutputMode;
 import com.kara4k.visor.model.Params;
-import com.kara4k.visor.processor.MainExecutor;
-import com.kara4k.visor.util.ArgsConverter;
-import com.kara4k.visor.util.PixelComporator;
 
 import java.io.File;
 import java.util.concurrent.Callable;
@@ -22,7 +22,7 @@ import picocli.CommandLine.Parameters;
 // TODO: 12/26/21 help text,
 public class Visor implements Callable<Integer> {
 
-	private final static Logger logger = Logger.getLogger(PixelComporator.class.getName());
+	private final static Logger logger = Logger.getLogger(PixelComparator.class.getName());
 
 	static {
 		final Logger rootLogger = LogManager.getLogManager().getLogger("");
@@ -46,7 +46,7 @@ public class Visor implements Callable<Integer> {
 
 	@Option(names = {"-m", "--matter-only"},
 			description = "Show only center [x,y] coordinates instead [x, y, width, height], or only [R, G, B] in pixel mode.")
-	private boolean outputCenterOnly;
+	private boolean outputMatterOnly;
 
 	@Option(names = {"-o", "--output-mode"}, defaultValue = "NONE",
 			description = "If more than one target files:\n" + "NONE - print without group dividing\n"
@@ -80,13 +80,17 @@ public class Visor implements Callable<Integer> {
 			description = "If more than one pixel passed, show if match for every one.")
 	private boolean showEveryPixelMatch;
 
-	private final MainExecutor mainExecutor = new MainExecutor();
+	@Option(names = {"-S", "--screenshot"}, description = "Create screenshot.")
+	private boolean screenshotMode;
+
+	@Option(names = {"-f", "--file"}, description = "Target output file.")
+	private File outputFile;
 
 	@Override
 	public Integer call() {
 		final Params params = createParams();
 		logger.info(params.toString());
-		mainExecutor.execute(params);
+		MainExecutor.execute(params);
 		return 0;
 	}
 
@@ -97,7 +101,7 @@ public class Visor implements Callable<Integer> {
 		params.setRectangle(rectangle);
 		params.setAccuracy(accuracy);
 		params.setDelay(delay);
-		params.setOutputCenterOnly(outputCenterOnly);
+		params.setOutputMatterOnly(outputMatterOnly);
 		params.setOutputMode(outputMode);
 		params.setDelimiter(delimiter);
 		params.setOutputPattern(outputPattern);
@@ -111,6 +115,8 @@ public class Visor implements Callable<Integer> {
 			params.setPixelsToCompare(points);
 		}
 		params.setShowEveryPixelMatch(showEveryPixelMatch);
+		params.setScreenshotMode(screenshotMode);
+		params.setOutputFile(outputFile);
 		return params;
 	}
 

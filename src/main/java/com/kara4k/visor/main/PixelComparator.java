@@ -1,4 +1,4 @@
-package com.kara4k.visor.util;
+package com.kara4k.visor.main;
 
 import com.kara4k.visor.model.IntPoint;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiPredicate;
 
-public class PixelComporator {
+public class PixelComparator {
 
 	public static List<Rectangle> findMatches(
 			final BufferedImage source, final BufferedImage target, final Rectangle searchArea,
