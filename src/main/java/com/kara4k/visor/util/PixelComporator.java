@@ -1,6 +1,6 @@
 package com.kara4k.visor.util;
 
-//import com.kara4k.visor.model.Point;
+import com.kara4k.visor.model.IntPoint;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -8,25 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiPredicate;
 
-//import com.kara4k.visor.model.Rectangle;
-
-public class Vision {
-
-	//	public static boolean isPointsMatches(final BufferedImage source, final List<Point> points,
-	//										  final BiPredicate<Color, Color> biPredicate) {
-	//
-	//		return points.stream().allMatch(point -> {
-	//			final int actualRGB = source.getRGB(point.getX(), point.getY());
-	//			return biPredicate.test(new Color(actualRGB), point.getExpectedColor());
-	//		});
-	//	}
+public class PixelComporator {
 
 	public static List<Rectangle> findMatches(
 			final BufferedImage source, final BufferedImage target, final Rectangle searchArea,
 			final BiPredicate<Color, Color> biPredicate
 	) {
-
-		// TODO: 12/26/21 optimize, do not search in found areas, now only first row
 
 		final List<Rectangle> result = new ArrayList<>();
 		final int targetRGB = target.getRGB(0, 0);
@@ -76,6 +63,27 @@ public class Vision {
 			}
 		}
 
+		return true;
+	}
+
+	public static boolean isPointMatches(
+			final BufferedImage source, final IntPoint point, final BiPredicate<Color, Color> biPredicate
+	) {
+
+		final int actualRgb = source.getRGB(point.getX(), point.getY());
+		return biPredicate.test(new Color(actualRgb), point.getColor());
+	}
+
+	public static boolean isPointsMatches(
+			final BufferedImage source, final IntPoint[] points, final BiPredicate<Color, Color> biPredicate
+	) {
+		for (final IntPoint point: points) {
+			final int actualRgb = source.getRGB(point.getX(), point.getY());
+			final boolean matches = biPredicate.test(new Color(actualRgb), point.getColor());
+			if (!matches) {
+				return false;
+			}
+		}
 		return true;
 	}
 }

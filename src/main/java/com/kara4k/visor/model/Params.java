@@ -15,6 +15,11 @@ public class Params {
 	private String delimiter;
 	private String outputPattern;
 
+	private boolean pixelsMode;
+	private IntPoint[] pixelsToGetColor;
+	private IntPoint[] pixelsToCompare;
+	private boolean showEveryPixelMatch;
+
 	public File getSourceImage() {
 		return sourceImage;
 	}
@@ -87,11 +92,45 @@ public class Params {
 		this.outputPattern = outputPattern;
 	}
 
+	public boolean isPixelsMode() {
+		return pixelsMode;
+	}
+
+	public void setPixelsMode(final boolean pixelsMode) {
+		this.pixelsMode = pixelsMode;
+	}
+
+	public IntPoint[] getPixelsToGetColor() {
+		return pixelsToGetColor;
+	}
+
+	public void setPixelsToGetColor(final IntPoint[] pixelsToGetColor) {
+		this.pixelsToGetColor = pixelsToGetColor;
+	}
+
+	public IntPoint[] getPixelsToCompare() {
+		return pixelsToCompare;
+	}
+
+	public void setPixelsToCompare(final IntPoint[] pixelsToCompare) {
+		this.pixelsToCompare = pixelsToCompare;
+	}
+
+	public boolean isShowEveryPixelMatch() {
+		return showEveryPixelMatch;
+	}
+
+	public void setShowEveryPixelMatch(final boolean showEveryPixelMatch) {
+		this.showEveryPixelMatch = showEveryPixelMatch;
+	}
+
 	@Override
 	public String toString() {
 		return "Params{" + "sourceImage=" + sourceImage + ", targetImages=" + Arrays.toString(targetImages)
 				+ ", rectangle=" + Arrays.toString(rectangle) + ", accuracy=" + Arrays.toString(accuracy) + ", delay="
 				+ delay + ", outputCenterOnly=" + outputCenterOnly + ", outputMode=" + outputMode + ", delimiter='"
-				+ delimiter + '\'' + ", outputPattern='" + outputPattern + '\'' + '}';
+				+ delimiter + '\'' + ", outputPattern='" + outputPattern + '\'' + ", pixelsMode=" + pixelsMode
+				+ ", pixelsToGetColor=" + Arrays.toString(pixelsToGetColor) + ", pixelsToCompare=" + Arrays.toString(
+				pixelsToCompare) + ", showEveryPixelMatch=" + showEveryPixelMatch + '}';
 	}
 }

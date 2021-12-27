@@ -1,5 +1,7 @@
 package com.kara4k.visor.processor;
 
+import com.kara4k.visor.util.ErrorUtil;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.logging.Logger;
@@ -15,8 +17,7 @@ public class RobotWrapper {
 		try {
 			this.robot = new Robot();
 		} catch (final AWTException e) {
-			System.err.println(e.getMessage());
-			System.exit(1);
+			ErrorUtil.printErrorAndExit(e::getMessage);
 		}
 	}
 

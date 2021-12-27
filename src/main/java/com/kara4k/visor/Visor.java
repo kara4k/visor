@@ -1,9 +1,11 @@
 package com.kara4k.visor;
 
+import com.kara4k.visor.model.IntPoint;
 import com.kara4k.visor.model.OutputMode;
 import com.kara4k.visor.model.Params;
 import com.kara4k.visor.processor.MainExecutor;
-import com.kara4k.visor.util.Vision;
+import com.kara4k.visor.util.ArgsConverter;
+import com.kara4k.visor.util.PixelComporator;
 
 import java.io.File;
 import java.util.concurrent.Callable;
@@ -20,47 +22,63 @@ import picocli.CommandLine.Parameters;
 // TODO: 12/26/21 help text,
 public class Visor implements Callable<Integer> {
 
-	private final static Logger logger = Logger.getLogger(Vision.class.getName());
+	private final static Logger logger = Logger.getLogger(PixelComporator.class.getName());
 
 	static {
 		final Logger rootLogger = LogManager.getLogManager().getLogger("");
 		rootLogger.setLevel(Level.INFO);
 	}
 
-	@Parameters(description = "target image files to search")
+	@Parameters(description = "Target image files to search.")
 	private File[] targetImages;
 
-	@Option(names = {"-s", "--source"}, description = "source image file, if not defined take screenshot")
+	@Option(names = {"-s", "--source"}, description = "Source image file, if not defined take screenshot.")
 	private File sourceImage;
 
-	@Option(arity = "0..4", names = {"-r", "--rectangle"}, description = "define rectangle area in image")
+	@Option(arity = "0..4", names = {"-r", "--rectangle"}, description = "Define rectangle area [x, y, width, height].")
 	private int[] rectangle;
 
-	@Option(arity = "0..3", names = {"-a", "--accuracy"}, description = "RGB accuracy for comparation [R, G, B]")
+	@Option(arity = "0..3", names = {"-a", "--accuracy"}, description = "RGB accuracy for comparation [R, G, B].")
 	private int[] accuracy;
 
-	@Option(names = {"-d", "--delay"}, description = "delay before capturing screenshot")
+	@Option(names = {"-l", "--delay"}, description = "Delay before capturing screenshot.")
 	private long delay;
 
-	@Option(names = {"-c", "--center-only"},
-			description = "show only center [x,y] coordinates instead [x, y, width, height]")
+	@Option(names = {"-m", "--matter-only"},
+			description = "Show only center [x,y] coordinates instead [x, y, width, height], or only [R, G, B] in pixel mode.")
 	private boolean outputCenterOnly;
 
 	@Option(names = {"-o", "--output-mode"}, defaultValue = "NONE",
-			description = "if more than one target files:\n" + "NONE - print without group dividing\n"
+			description = "If more than one target files:\n" + "NONE - print without group dividing\n"
 					+ "NAME - print target filename before matched coords\n" + "PATH - same as NAME but absolute path\n"
 					+ "SPACE - divide groups by space only")
 	private OutputMode outputMode;
 
-	@Option(names = {"-l", "--delimiter"}, defaultValue = " ",
-			description = "set delimiter for output coords, space by default")
+	@Option(names = {"-d", "--delimiter"}, defaultValue = " ",
+			description = "Set delimiter for output coords, space by default.")
 	private String delimiter;
 
 	@Option(names = {"-p", "--pattern"},
-			description = "java regexp for output line:\n" + "%1$d - x\n" + "%2$d - y\n" + "%3$d - width\n"
-					+ "%4$d - height\n" + "%5$d - centerX\n" + "%6$d - centerY\n" + "%7$s - filename\n"
-					+ "%8$s - absolute file path")
-	private String outputPattern; // fix?
+			description = "Java regexp for output line:\n" + "%%1$d - x\n" + "%%2$d - y\n" + "%%3$d - width\n"
+					+ "%%4$d - height\n" + "%%5$d - centerX\n" + "%%6$d - centerY\n" + "%%7$s - filename\n"
+					+ "%%8$s - absolute file path\n" + "\nPixel mode (-x):\n" + "%%1$d - x\n" + "%%2$d - y\n"
+					+ "%%3$d - Red\n" + "%%4$d - Green\n" + "%%5$d - Blue\n" + "%%6$s - source absolute path\n" + "")
+	private String outputPattern;
+
+	@Option(names = {"-x", " --pixels-mode"},
+			description = "Pixels mode, get pixels colors or compare specified pixels to source, can use -r option.")
+	private boolean pixelsMode;
+
+	@Option(arity = "*", names = {"-g", "--get-color"}, description = "Comma separated coords [x,y]")
+	private String[] pixelsToGetColor;
+
+	@Option(arity = "*", names = {"-C", "--compare-pixels"},
+			description = "Comma separated coords and expected pixel color [x,y,R,G,B], returns 0 on match, otherwise 1.")
+	private String[] pixelsToCompare;
+
+	@Option(names = {"-e", "--every-match"},
+			description = "If more than one pixel passed, show if match for every one.")
+	private boolean showEveryPixelMatch;
 
 	private final MainExecutor mainExecutor = new MainExecutor();
 
@@ -83,6 +101,16 @@ public class Visor implements Callable<Integer> {
 		params.setOutputMode(outputMode);
 		params.setDelimiter(delimiter);
 		params.setOutputPattern(outputPattern);
+		params.setPixelsMode(pixelsMode);
+		if (pixelsMode && pixelsToGetColor != null) {
+			final IntPoint[] points = ArgsConverter.convertPixelsToGetColor(pixelsToGetColor);
+			params.setPixelsToGetColor(points);
+		}
+		if (pixelsMode && pixelsToCompare != null) {
+			final IntPoint[] points = ArgsConverter.convertPixelsToCompare(pixelsToCompare);
+			params.setPixelsToCompare(points);
+		}
+		params.setShowEveryPixelMatch(showEveryPixelMatch);
 		return params;
 	}
 

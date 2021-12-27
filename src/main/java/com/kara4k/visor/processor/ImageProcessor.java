@@ -1,7 +1,8 @@
 package com.kara4k.visor.processor;
 
+import com.kara4k.visor.model.IntPoint;
 import com.kara4k.visor.model.Params;
-import com.kara4k.visor.util.Vision;
+import com.kara4k.visor.util.PixelComporator;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,12 +15,12 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.logging.Logger;
 
-public class ImageSearchProcessor {
+public class ImageProcessor {
 
-	private final static Logger logger = Logger.getLogger(ImageSearchProcessor.class.getName());
+	private final static Logger logger = Logger.getLogger(ImageProcessor.class.getName());
 
 	public static void findMatchedAreas(final Params params) {
-		final BufferedImage sourceImage = loadSourceImage(params.getSourceImage(), params.getDelay());
+		final BufferedImage sourceImage = ImageLoader.loadSourceImage(params.getSourceImage(), params.getDelay());
 		final File[] targetImages = params.getTargetImages();
 
 		logger.info("Target images: " + Arrays.toString(targetImages));
@@ -36,26 +37,43 @@ public class ImageSearchProcessor {
 		for (int i = 0; i < targetImages.length; i++) {
 			final File tImage = targetImages[i];
 			final BufferedImage image = ImageLoader.loadImage(tImage);
-			final List<Rectangle> matches = Vision.findMatches(sourceImage, image, searchArea, rgbBiPredicate);
-			ResultPrinter.print(params, matches, tImage, i != targetImages.length - 1);
+			final List<Rectangle> matches = PixelComporator.findMatches(sourceImage, image, searchArea, rgbBiPredicate);
+			ResultPrinter.printFoundTargets(params, matches, tImage, i != targetImages.length - 1);
 		}
 	}
 
-	private static BufferedImage loadSourceImage(final File file, final long delay) {
-		BufferedImage sourceImage = null;
-		if (file == null) {
-			try {
-				logger.info("Source is null, start sleep for " + delay + "before screenshot capturing");
-				Thread.sleep(delay);
-			} catch (final InterruptedException e) {
-				System.err.println(e.getMessage());
-				System.exit(1);
+	public static void comparePixels(final Params params) {
+		final BufferedImage sourceImage = ImageLoader.loadSourceImage(params.getSourceImage(), params.getDelay());
+		final IntPoint[] pixelsToCompare = params.getPixelsToCompare();
+		final BiPredicate<Color, Color> rgbBiPredicate = createRgbBiPredicate(params.getAccuracy());
+		if (params.isShowEveryPixelMatch()) {
+			for (final IntPoint point: pixelsToCompare) {
+				final boolean pointMatches = PixelComporator.isPointMatches(sourceImage, point, rgbBiPredicate);
+				ResultPrinter.printTestResult(params, point, pointMatches);
 			}
-			sourceImage = RobotWrapper.getInstance().getFullScreenshot();
 		} else {
-			return ImageLoader.loadImage(file);
+			final boolean pointsMatches = PixelComporator.isPointsMatches(sourceImage, pixelsToCompare, rgbBiPredicate);
+			ResultPrinter.printTestResult(pointsMatches);
 		}
-		return sourceImage;
+	}
+
+	public static void showPixelColors(final Params params) {
+		final BufferedImage sourceImage = ImageLoader.loadSourceImage(params.getSourceImage(), params.getDelay());
+		final IntPoint[] pixelsToGetColor = params.getPixelsToGetColor();
+		for (final IntPoint intPoint: pixelsToGetColor) {
+			final int rgb = sourceImage.getRGB(intPoint.getX(), intPoint.getY());
+			intPoint.setColor(new Color(rgb));
+			ResultPrinter.printPixelColor(params, intPoint);
+		}
+		if (params.getRectangle() != null) {
+			final Rectangle rectangle = createRectangle(sourceImage, params.getRectangle());
+			for (int i = (int) rectangle.getY(); i < rectangle.getY() + rectangle.getHeight(); i++) {
+				for (int j = (int) rectangle.getX(); j < rectangle.getX() + rectangle.getWidth(); j++) {
+					final int rgb = sourceImage.getRGB(j, i);
+					ResultPrinter.printPixelColor(params, new IntPoint(j, i, new Color(rgb)));
+				}
+			}
+		}
 	}
 
 	@NotNull
@@ -106,5 +124,4 @@ public class ImageSearchProcessor {
 			return red && green && blue;
 		};
 	}
-
 }
