@@ -20,7 +20,7 @@ public class ImageLoader {
 		BufferedImage sourceImage = null;
 		if (file == null) {
 			try {
-				logger.info("Source is null, start sleep for " + delay + "before screenshot capturing");
+				logger.info("Source is null, start sleep for " + delay + " sec before screenshot capturing");
 				Thread.sleep(delay);
 			} catch (final InterruptedException e) {
 				ErrorUtils.printErrorAndExit(e::getMessage);

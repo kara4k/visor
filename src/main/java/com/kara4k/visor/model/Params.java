@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class Params {
 
 	private File sourceImage;
-	private File[] targetImages; // TODO: 12/26/21 uri?
+	private File[] targetImages;
 	private int[] rectangle;
 	private int[] accuracy;
 	private long delay;

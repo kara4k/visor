@@ -29,16 +29,16 @@ public class RobotWrapper {
 	}
 
 	public BufferedImage getFullScreenshot() {
-		logger.info("Attempt to create fullscreen image");
+		logger.info("Attempt to create full screenshot");
 		return robot.createScreenCapture(getFullScreenRectangle());
 	}
 
 	public BufferedImage getScreenshot(final Rectangle rectangle) {
+		logger.info("Attempt to create screenshot with " + rectangle);
 		return robot.createScreenCapture(rectangle);
 	}
 
 	public Rectangle getFullScreenRectangle() {
-
 		final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		return new Rectangle(0, 0, (int) screenSize.getWidth(), (int) screenSize.getHeight());
 	}

@@ -19,20 +19,20 @@ public class PixelComparator {
 		final int targetRGB = target.getRGB(0, 0);
 		final int startY = searchArea == null ? 0 : (int) searchArea.getY();
 		final int startX = searchArea == null ? 0 : (int) searchArea.getX();
-		final int sourceHeight = searchArea == null ? source.getHeight() : (int) searchArea.getHeight();
-		final int sourceWidth = searchArea == null ? source.getWidth() : (int) searchArea.getWidth();
+		final int rectangleWidth = searchArea == null ? source.getHeight() : (int) searchArea.getWidth() + startX;
+		final int rectangleHeight = searchArea == null ? source.getWidth() : (int) searchArea.getHeight() + startY;
 
 		rows:
-		for (int y = startY; y < sourceHeight; y++) {
-			if (y + target.getHeight() > sourceHeight) {
+		for (int y = startY; y < rectangleHeight; y++) {
+			if (y + target.getHeight() > source.getHeight()) {
 				break;
 			}
 
-			for (int x = startX; x < sourceWidth; x++) {
+			for (int x = startX; x < rectangleWidth; x++) {
 				final int sourceRGB = source.getRGB(x, y);
 
 				if (biPredicate.test(new Color(sourceRGB), new Color(targetRGB))) {
-					if (target.getWidth() + x > sourceWidth) {
+					if (target.getWidth() + x > source.getWidth()) {
 						continue rows;
 					}
 
@@ -43,7 +43,6 @@ public class PixelComparator {
 				}
 			}
 		}
-
 		return result;
 	}
 

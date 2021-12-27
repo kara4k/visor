@@ -16,11 +16,14 @@ public class FileCreator {
 		try {
 			final File outputFile = createOutputFile(params);
 			final BufferedImage screenshot;
+
+			if (params.getDelay() > 0) {
+				Thread.sleep(params.getDelay());
+			}
+
 			if (params.getRectangle() != null) {
 				final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-				final Rectangle rectangle =
-						CoordUtils.createRectangle(screenSize,
-												   params.getRectangle());
+				final Rectangle rectangle = CoordUtils.createRectangle(screenSize, params.getRectangle());
 				screenshot = RobotWrapper.getInstance().getScreenshot(rectangle);
 			} else {
 				screenshot = RobotWrapper.getInstance().getFullScreenshot();

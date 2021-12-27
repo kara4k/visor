@@ -63,7 +63,7 @@ public class ResultPrinter {
 											  intPoint.getColor().getRed(), intPoint.getColor().getGreen(),
 											  intPoint.getColor().getBlue(), sourceName);
 			System.out.println(line);
-		} else if (params.isOutputMatterOnly()) { // todo rename
+		} else if (params.isOutputMatterOnly()) {
 			final String line = createDelimitedString(params.getDelimiter(), intPoint.getColor().getRed(),
 													  intPoint.getColor().getGreen(), intPoint.getColor().getBlue());
 			System.out.println(line);
