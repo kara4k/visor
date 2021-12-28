@@ -75,7 +75,7 @@ public class ResultPrinter {
 		}
 	}
 
-	private static String createDelimitedString(final String delimiter, final int... coords) {
+	public static String createDelimitedString(final String delimiter, final int... coords) {
 		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < coords.length; i++) {
 			sb.append(coords[i]);
@@ -84,6 +84,16 @@ public class ResultPrinter {
 			}
 		}
 		return sb.toString();
+	}
+
+	public static String createUiFormatString(final Point point, final Color color) {
+		return "x: " + (int) point.getX() + " y: " + (int) point.getY() + " [ R: " + color.getRed() + " G: "
+				+ color.getGreen() + " B: " + color.getBlue() + " ]";
+	}
+
+	public static String createDelimitedString(final String delimiter, final Point point, final Color color) {
+		return createDelimitedString(delimiter, (int) point.getX(), (int) point.getY(), color.getRed(),
+									 color.getGreen(), color.getBlue());
 	}
 
 	public static void printTestResult(final Params params, final IntPoint point, final boolean success) {
@@ -98,5 +108,4 @@ public class ResultPrinter {
 	public static void print(final Supplier<String> message) {
 		System.out.println(message.get());
 	}
-
 }

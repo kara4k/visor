@@ -23,6 +23,8 @@ public class Params {
 	private boolean screenshotMode;
 	private File outputFile;
 
+	private boolean interactiveMode;
+
 	public File getSourceImage() {
 		return sourceImage;
 	}
@@ -143,6 +145,14 @@ public class Params {
 		this.outputFile = outputFile;
 	}
 
+	public boolean isInteractiveMode() {
+		return interactiveMode;
+	}
+
+	public void setInteractiveMode(final boolean interactiveMode) {
+		this.interactiveMode = interactiveMode;
+	}
+
 	@Override
 	public String toString() {
 		return "Params{" + "sourceImage=" + sourceImage + ", targetImages=" + Arrays.toString(targetImages)
@@ -151,6 +161,6 @@ public class Params {
 				+ delimiter + '\'' + ", outputPattern='" + outputPattern + '\'' + ", pixelsMode=" + pixelsMode
 				+ ", pixelsToGetColor=" + Arrays.toString(pixelsToGetColor) + ", pixelsToCompare=" + Arrays.toString(
 				pixelsToCompare) + ", showEveryPixelMatch=" + showEveryPixelMatch + ", screenshotMode=" + screenshotMode
-				+ ", outputFile=" + outputFile + '}';
+				+ ", outputFile=" + outputFile + ", interactiveMode=" + interactiveMode + '}';
 	}
 }

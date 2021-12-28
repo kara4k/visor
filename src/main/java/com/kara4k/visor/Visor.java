@@ -19,7 +19,6 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 @Command(name = "visor", mixinStandardHelpOptions = true, description = "Visor is epic", version = "0.1")
-// TODO: 12/26/21 help text,
 public class Visor implements Callable<Integer> {
 
 	private final static Logger logger = Logger.getLogger(PixelComparator.class.getName());
@@ -60,12 +59,12 @@ public class Visor implements Callable<Integer> {
 
 	@Option(names = {"-p", "--pattern"},
 			description = "Java regexp for output line:\n" + "%%1$d - x\n" + "%%2$d - y\n" + "%%3$d - width\n"
-					+ "%%4$d - height\n" + "%%5$d - centerX\n" + "%%6$d - centerY\n" + "%%7$s - filename\n"
-					+ "%%8$s - absolute file path\n" + "\nPixel mode (-x):\n" + "%%1$d - x\n" + "%%2$d - y\n"
+					+ "%%4$d - height\n" + "%%5$d - centerX\n" + "%%6$d - centerY\n" + "%%7$s - target filename\n"
+					+ "%%8$s - absolute target file path\n" + "\nPixel mode (-x):\n" + "%%1$d - x\n" + "%%2$d - y\n"
 					+ "%%3$d - Red\n" + "%%4$d - Green\n" + "%%5$d - Blue\n" + "%%6$s - source absolute path\n" + "")
 	private String outputPattern;
 
-	@Option(names = {"-x", " --pixels-mode"},
+	@Option(names = {"-x", "--pixels-mode"},
 			description = "Pixels mode, get pixels colors or compare specified pixels to source, can use -r option.")
 	private boolean pixelsMode;
 
@@ -85,6 +84,10 @@ public class Visor implements Callable<Integer> {
 
 	@Option(names = {"-f", "--file"}, description = "Target output file.")
 	private File outputFile;
+
+	@Option(names = {"-I", "--interactive-mode"},
+			description = "Interactive mode. Use 'Alt-S' and 'Alt-E' to save into file coords under mouse pointer")
+	private boolean interactiveMode;
 
 	@Override
 	public Integer call() {
@@ -117,6 +120,7 @@ public class Visor implements Callable<Integer> {
 		params.setShowEveryPixelMatch(showEveryPixelMatch);
 		params.setScreenshotMode(screenshotMode);
 		params.setOutputFile(outputFile);
+		params.setInteractiveMode(interactiveMode);
 		return params;
 	}
 

@@ -14,7 +14,7 @@ public class FileCreator {
 
 	public static void createScreenshot(final Params params) {
 		try {
-			final File outputFile = createOutputFile(params);
+			final File outputFile = defineOutputFile(params, "screenshot", ".jpg");
 			final BufferedImage screenshot;
 
 			if (params.getDelay() > 0) {
@@ -36,7 +36,7 @@ public class FileCreator {
 		}
 	}
 
-	private static File createOutputFile(final Params params) {
+	public static File defineOutputFile(final Params params, final String filename, final String extension) {
 		final File outputFile = params.getOutputFile();
 		if (outputFile != null) {
 			if (outputFile.exists()) {
@@ -46,7 +46,7 @@ public class FileCreator {
 			return outputFile;
 		} else {
 			final String workingDir = System.getProperty("user.dir");
-			return new File(workingDir + "/screenshot_" + System.currentTimeMillis() + ".jpg");
+			return new File(workingDir + "/" + filename + "_" + System.currentTimeMillis() + extension);
 		}
 	}
 }

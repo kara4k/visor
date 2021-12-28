@@ -43,4 +43,8 @@ public class RobotWrapper {
 		return new Rectangle(0, 0, (int) screenSize.getWidth(), (int) screenSize.getHeight());
 	}
 
+	public Color getPixelColor(final Point point) {
+		return robot.getPixelColor((int) point.getX(), (int) point.getY());
+	}
+
 }
