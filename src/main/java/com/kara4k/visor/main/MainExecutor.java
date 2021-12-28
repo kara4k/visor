@@ -8,7 +8,6 @@ import javax.swing.*;
 
 public class MainExecutor {
 
-
 	public static void execute(final Params params) {
 		if (params.isPixelsMode()) {
 			if (params.getPixelsToGetColor() != null) {
@@ -31,7 +30,7 @@ public class MainExecutor {
 			}
 		} else if (params.getPointsToCalculate() != null) {
 			CoordsCalculator.calculate(params);
-		} else {
+		} else if (params.getTargetImages() != null) {
 			ImageProcessor.findMatchedAreas(params);
 		}
 

@@ -12,11 +12,9 @@ import java.util.function.BiPredicate;
 
 public class ImageProcessor {
 
-
 	public static void findMatchedAreas(final Params params) {
 		final BufferedImage sourceImage = ImageLoader.loadSourceImage(params.getSourceImage(), params.getDelay());
 		final File[] targetImages = params.getTargetImages();
-
 
 		if (targetImages == null) {
 			return;
@@ -24,14 +22,14 @@ public class ImageProcessor {
 
 		final BiPredicate<Color, Color> rgbBiPredicate = createRgbBiPredicate(params.getAccuracy());
 		final Rectangle searchArea =
-				CoordUtils.createRectangle(sourceImage, params.getRectangle());
-
+				CoordUtils.createRectangle(sourceImage.getWidth(), sourceImage.getHeight(),
+										   params.getRectangle());
 
 		for (int i = 0; i < targetImages.length; i++) {
 			final File tImage = targetImages[i];
 			final BufferedImage image = ImageLoader.loadImage(tImage);
 			final List<Rectangle> matches = PixelComparator.findMatches(sourceImage, image, searchArea, rgbBiPredicate);
-			ResultPrinter.printFoundTargets(params, matches, tImage, i != targetImages.length - 1);
+			ResultPrinter.printFoundTargets(params, matches, tImage, i == targetImages.length - 1);
 		}
 	}
 
@@ -60,7 +58,8 @@ public class ImageProcessor {
 		}
 		if (params.getRectangle() != null) {
 			final Rectangle rectangle =
-					CoordUtils.createRectangle(sourceImage, params.getRectangle());
+					CoordUtils.createRectangle(sourceImage.getWidth(), sourceImage.getHeight(),
+											   params.getRectangle());
 			for (int i = (int) rectangle.getY(); i < rectangle.getY() + rectangle.getHeight(); i++) {
 				for (int j = (int) rectangle.getX(); j < rectangle.getX() + rectangle.getWidth(); j++) {
 					final int rgb = sourceImage.getRGB(j, i);

@@ -23,7 +23,9 @@ public class FileCreator {
 
 			if (params.getRectangle() != null) {
 				final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-				final Rectangle rectangle = CoordUtils.createRectangle(screenSize, params.getRectangle());
+				final Rectangle rectangle =
+						CoordUtils.createRectangle((int) screenSize.getWidth(), (int) screenSize.getHeight(),
+												   params.getRectangle());
 				screenshot = RobotWrapper.getInstance().getScreenshot(rectangle);
 			} else {
 				screenshot = RobotWrapper.getInstance().getFullScreenshot();
