@@ -7,20 +7,16 @@ import com.kara4k.visor.util.CoordUtils;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiPredicate;
-import java.util.logging.Logger;
 
 public class ImageProcessor {
 
-	private final static Logger logger = Logger.getLogger(ImageProcessor.class.getName());
 
 	public static void findMatchedAreas(final Params params) {
 		final BufferedImage sourceImage = ImageLoader.loadSourceImage(params.getSourceImage(), params.getDelay());
 		final File[] targetImages = params.getTargetImages();
 
-		logger.info("Target images: " + Arrays.toString(targetImages));
 
 		if (targetImages == null) {
 			return;
@@ -30,7 +26,6 @@ public class ImageProcessor {
 		final Rectangle searchArea =
 				CoordUtils.createRectangle(sourceImage, params.getRectangle());
 
-		logger.info("Search area: " + searchArea);
 
 		for (int i = 0; i < targetImages.length; i++) {
 			final File tImage = targetImages[i];

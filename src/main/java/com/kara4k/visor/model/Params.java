@@ -25,6 +25,8 @@ public class Params {
 
 	private boolean interactiveMode;
 
+	private IntPoint[] pointsToCalculate;
+
 	public File getSourceImage() {
 		return sourceImage;
 	}
@@ -153,6 +155,14 @@ public class Params {
 		this.interactiveMode = interactiveMode;
 	}
 
+	public IntPoint[] getPointsToCalculate() {
+		return pointsToCalculate;
+	}
+
+	public void setPointsToCalculate(final IntPoint[] pointsToCalculate) {
+		this.pointsToCalculate = pointsToCalculate;
+	}
+
 	@Override
 	public String toString() {
 		return "Params{" + "sourceImage=" + sourceImage + ", targetImages=" + Arrays.toString(targetImages)
@@ -161,6 +171,7 @@ public class Params {
 				+ delimiter + '\'' + ", outputPattern='" + outputPattern + '\'' + ", pixelsMode=" + pixelsMode
 				+ ", pixelsToGetColor=" + Arrays.toString(pixelsToGetColor) + ", pixelsToCompare=" + Arrays.toString(
 				pixelsToCompare) + ", showEveryPixelMatch=" + showEveryPixelMatch + ", screenshotMode=" + screenshotMode
-				+ ", outputFile=" + outputFile + ", interactiveMode=" + interactiveMode + '}';
+				+ ", outputFile=" + outputFile + ", interactiveMode=" + interactiveMode + ", pointsToCalculate="
+				+ Arrays.toString(pointsToCalculate) + '}';
 	}
 }

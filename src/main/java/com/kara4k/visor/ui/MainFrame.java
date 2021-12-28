@@ -33,6 +33,7 @@ public class MainFrame extends JFrame implements Callback {
 
 		textField.setBounds(28, 65, 190, 30);
 		this.add(textField);
+
 		button.setHorizontalAlignment(SwingConstants.CENTER);
 		button.setBounds(225, 65, 60, 30);
 		button.setFont((new Font("Arial", Font.PLAIN, 10)));

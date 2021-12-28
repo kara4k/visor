@@ -8,19 +8,15 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
 public class ImageLoader {
 
-	private final static Logger logger = Logger.getLogger(ImageLoader.class.getName());
-
 	public static BufferedImage loadSourceImage(final File file, final long delay) {
 		BufferedImage sourceImage = null;
 		if (file == null) {
 			try {
-				logger.info("Source is null, start sleep for " + delay + " sec before screenshot capturing");
 				Thread.sleep(delay);
 			} catch (final InterruptedException e) {
 				ErrorUtils.printErrorAndExit(e::getMessage);
@@ -40,7 +36,6 @@ public class ImageLoader {
 			ErrorUtils.printErrorAndExit(e::getMessage);
 		}
 		if (image == null) {
-			logger.info("Image is null " + file.getAbsolutePath());
 			ErrorUtils.printErrorAndExit(() -> "Can't load image from " + file.getAbsolutePath());
 		}
 		return image;
@@ -50,7 +45,6 @@ public class ImageLoader {
 		BufferedImage image = null;
 		try {
 			image = ImageIO.read(file);
-			logger.info("Attempt to subimage: " + rectangle);
 			image = image.getSubimage((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.getWidth(),
 									  (int) rectangle.getHeight());
 		} catch (final IOException e) {

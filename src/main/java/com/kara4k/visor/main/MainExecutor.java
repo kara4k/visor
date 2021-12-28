@@ -4,13 +4,10 @@ import com.kara4k.visor.model.Params;
 import com.kara4k.visor.ui.MainFrame;
 import com.kara4k.visor.util.ErrorUtils;
 
-import java.util.logging.Logger;
-
 import javax.swing.*;
 
 public class MainExecutor {
 
-	private final static Logger logger = Logger.getLogger(MainExecutor.class.getName());
 
 	public static void execute(final Params params) {
 		if (params.isPixelsMode()) {
@@ -32,6 +29,8 @@ public class MainExecutor {
 			} catch (final InterruptedException e) {
 				ErrorUtils.printErrorAndExit(e::getMessage);
 			}
+		} else if (params.getPointsToCalculate() != null) {
+			CoordsCalculator.calculate(params);
 		} else {
 			ImageProcessor.findMatchedAreas(params);
 		}

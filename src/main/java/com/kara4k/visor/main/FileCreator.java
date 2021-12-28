@@ -30,7 +30,7 @@ public class FileCreator {
 			}
 
 			ImageIO.write(screenshot, "jpg", outputFile);
-			ResultPrinter.print(outputFile::getAbsolutePath);
+			ResultPrinter.printLine(outputFile::getAbsolutePath);
 		} catch (final Exception e) {
 			ErrorUtils.printErrorAndExit(e::getMessage);
 		}

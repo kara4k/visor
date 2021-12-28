@@ -2,16 +2,12 @@ package com.kara4k.visor;
 
 import com.kara4k.visor.main.ArgsConverter;
 import com.kara4k.visor.main.MainExecutor;
-import com.kara4k.visor.main.PixelComparator;
 import com.kara4k.visor.model.IntPoint;
 import com.kara4k.visor.model.OutputMode;
 import com.kara4k.visor.model.Params;
 
 import java.io.File;
 import java.util.concurrent.Callable;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -20,13 +16,6 @@ import picocli.CommandLine.Parameters;
 
 @Command(name = "visor", mixinStandardHelpOptions = true, description = "Visor is epic", version = "0.1")
 public class Visor implements Callable<Integer> {
-
-	private final static Logger logger = Logger.getLogger(PixelComparator.class.getName());
-
-	static {
-		final Logger rootLogger = LogManager.getLogManager().getLogger("");
-		rootLogger.setLevel(Level.INFO);
-	}
 
 	@Parameters(description = "Target image files to search.")
 	private File[] targetImages;
@@ -64,15 +53,15 @@ public class Visor implements Callable<Integer> {
 					+ "%%3$d - Red\n" + "%%4$d - Green\n" + "%%5$d - Blue\n" + "%%6$s - source absolute path\n" + "")
 	private String outputPattern;
 
-	@Option(names = {"-x", "--pixels-mode"},
+	@Option(names = {"-X", "--pixels-mode"},
 			description = "Pixels mode, get pixels colors or compare specified pixels to source, can use -r option.")
 	private boolean pixelsMode;
 
-	@Option(arity = "*", names = {"-g", "--get-color"}, description = "Comma separated coords [x,y]")
+	@Option(arity = "*", names = {"-g", "--get-color"}, description = "Delimiter separated coords [x,y]")
 	private String[] pixelsToGetColor;
 
-	@Option(arity = "*", names = {"-C", "--compare-pixels"},
-			description = "Comma separated coords and expected pixel color [x,y,R,G,B], returns 0 on match, otherwise 1.")
+	@Option(arity = "*", names = {"-c", "--compare-pixels"},
+			description = "Delimiter separated coords and expected pixel color [x,y,R,G,B], returns 0 on match, otherwise 1.")
 	private String[] pixelsToCompare;
 
 	@Option(names = {"-e", "--every-match"},
@@ -89,10 +78,14 @@ public class Visor implements Callable<Integer> {
 			description = "Interactive mode. Use 'Alt-S' and 'Alt-E' to save into file coords under mouse pointer")
 	private boolean interactiveMode;
 
+	@Option(arity = "*", names = {"-C", "--width-height"},
+			description = "Calculate width and height. Delimiter separated coords [x,y]. "
+					+ "Output is [width, height]. Can use matter (-m) for center calculation.")
+	private String[] pointsToCalculate;
+
 	@Override
 	public Integer call() {
 		final Params params = createParams();
-		logger.info(params.toString());
 		MainExecutor.execute(params);
 		return 0;
 	}
@@ -110,17 +103,21 @@ public class Visor implements Callable<Integer> {
 		params.setOutputPattern(outputPattern);
 		params.setPixelsMode(pixelsMode);
 		if (pixelsMode && pixelsToGetColor != null) {
-			final IntPoint[] points = ArgsConverter.convertPixelsToGetColor(pixelsToGetColor);
+			final IntPoint[] points = ArgsConverter.convertPixelsToGetColor(delimiter, pixelsToGetColor);
 			params.setPixelsToGetColor(points);
 		}
 		if (pixelsMode && pixelsToCompare != null) {
-			final IntPoint[] points = ArgsConverter.convertPixelsToCompare(pixelsToCompare);
+			final IntPoint[] points = ArgsConverter.convertPixelsToCompare(delimiter, pixelsToCompare);
 			params.setPixelsToCompare(points);
 		}
 		params.setShowEveryPixelMatch(showEveryPixelMatch);
 		params.setScreenshotMode(screenshotMode);
 		params.setOutputFile(outputFile);
 		params.setInteractiveMode(interactiveMode);
+		if (pointsToCalculate != null) {
+			final IntPoint[] points = ArgsConverter.convertPointsToCalculate(delimiter, pointsToCalculate);
+			params.setPointsToCalculate(points);
+		}
 		return params;
 	}
 

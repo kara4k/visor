@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.List;
 import java.util.function.Supplier;
 
+// TODO: 12/28/21 extract logic into processors, leave only formatting and prints?
 public class ResultPrinter {
 
 	public static void printFoundTargets(
@@ -53,6 +54,18 @@ public class ResultPrinter {
 		if (params.getOutputMode() == OutputMode.SPACE && !lastTarget) {
 			System.out.println();
 		}
+	}
+
+	public static void printWidthHeight(final Params params, final IntPoint leftUpper, final IntPoint rightLower) {
+		final IntPoint point;
+		if (params.isOutputMatterOnly()) {
+			point = CoordUtils.getCenterPoint(leftUpper, rightLower);
+		} else {
+			point = CoordUtils.getWidthHeight(leftUpper, rightLower);
+		}
+		final String line =
+				ResultPrinter.createDelimitedString(params.getDelimiter(), point.getX(), point.getY());
+		System.out.println(line);
 	}
 
 	public static void printPixelColor(final Params params, final IntPoint intPoint) {
@@ -105,7 +118,7 @@ public class ResultPrinter {
 		System.out.println(success ? 0 : 1);
 	}
 
-	public static void print(final Supplier<String> message) {
+	public static void printLine(final Supplier<String> message) {
 		System.out.println(message.get());
 	}
 }
