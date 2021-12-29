@@ -10,7 +10,7 @@ public class CoordsCalculator {
 		for (int i = 0; i < pointsToCalculate.length; i += 2) {
 			final IntPoint leftUpper = pointsToCalculate[i];
 			final IntPoint rightLower = pointsToCalculate[i + 1];
-			ResultPrinter.printWidthHeight(params, leftUpper, rightLower);
+			ResultPrinter.printCalculation(params, leftUpper, rightLower);
 		}
 	}
 

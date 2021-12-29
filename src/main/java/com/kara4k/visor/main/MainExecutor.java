@@ -22,7 +22,7 @@ public class MainExecutor {
 				try {
 					UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
 				} catch (final Exception e) {
-					com.kara4k.visor.util.ErrorUtils.printErrorAndExit(e::getMessage);
+					// its ok, use default look and feel
 				}
 				new MainFrame().start(params);
 			} catch (final InterruptedException e) {

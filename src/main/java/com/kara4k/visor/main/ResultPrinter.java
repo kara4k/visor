@@ -56,7 +56,7 @@ public class ResultPrinter {
 		}
 	}
 
-	public static void printWidthHeight(final Params params, final IntPoint leftUpper, final IntPoint rightLower) {
+	public static void printCalculation(final Params params, final IntPoint leftUpper, final IntPoint rightLower) {
 		final IntPoint point;
 		if (params.isOutputMatterOnly()) {
 			point = CoordUtils.getCenterPoint(leftUpper, rightLower);

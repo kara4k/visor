@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 
 public class RobotWrapper {
 
-
 	private static RobotWrapper robotWrapper = null;
 	private Robot robot;
 

@@ -22,8 +22,7 @@ public class ImageProcessor {
 
 		final BiPredicate<Color, Color> rgbBiPredicate = createRgbBiPredicate(params.getAccuracy());
 		final Rectangle searchArea =
-				CoordUtils.createRectangle(sourceImage.getWidth(), sourceImage.getHeight(),
-										   params.getRectangle());
+				CoordUtils.createRectangle(sourceImage.getWidth(), sourceImage.getHeight(), params.getRectangle());
 
 		for (int i = 0; i < targetImages.length; i++) {
 			final File tImage = targetImages[i];
@@ -37,6 +36,7 @@ public class ImageProcessor {
 		final BufferedImage sourceImage = ImageLoader.loadSourceImage(params.getSourceImage(), params.getDelay());
 		final IntPoint[] pixelsToCompare = params.getPixelsToCompare();
 		final BiPredicate<Color, Color> rgbBiPredicate = createRgbBiPredicate(params.getAccuracy());
+
 		if (params.isShowEveryPixelMatch()) {
 			for (final IntPoint point: pixelsToCompare) {
 				final boolean pointMatches = PixelComparator.isPointMatches(sourceImage, point, rgbBiPredicate);
@@ -51,15 +51,16 @@ public class ImageProcessor {
 	public static void showPixelColors(final Params params) {
 		final BufferedImage sourceImage = ImageLoader.loadSourceImage(params.getSourceImage(), params.getDelay());
 		final IntPoint[] pixelsToGetColor = params.getPixelsToGetColor();
+
 		for (final IntPoint intPoint: pixelsToGetColor) {
 			final int rgb = sourceImage.getRGB(intPoint.getX(), intPoint.getY());
 			intPoint.setColor(new Color(rgb));
 			ResultPrinter.printPixelColor(params, intPoint);
 		}
+
 		if (params.getRectangle() != null) {
 			final Rectangle rectangle =
-					CoordUtils.createRectangle(sourceImage.getWidth(), sourceImage.getHeight(),
-											   params.getRectangle());
+					CoordUtils.createRectangle(sourceImage.getWidth(), sourceImage.getHeight(), params.getRectangle());
 			for (int i = (int) rectangle.getY(); i < rectangle.getY() + rectangle.getHeight(); i++) {
 				for (int j = (int) rectangle.getX(); j < rectangle.getX() + rectangle.getWidth(); j++) {
 					final int rgb = sourceImage.getRGB(j, i);
